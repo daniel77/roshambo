@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Roshambo Application</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+</head>
+<body>
+<script>
+$( document ).ready(function() {
+ $("#game").val("");
+ $("#round").click(function() {
+      if ($( "#game" ).val() === "") { // it is a new game.
+        $.get("start", function( data ) {
+          $("#game").val(data);
+          $("#gameIdLabel").text(data);
+          round();
+        });
+      } else {
+        round();
+      }
+ });
+
+ $("#restart").click(function() {
+      $.get( $( "#game" ).val() + "/restart", function( data ) {
+        var table = document.getElementById("resultsTable");
+        for (i = table.rows.length-1; i>= 1; i--)
+          table.deleteRow(i);
+    });
+ });
+
+ function round() {
+       $.get( $( "#game" ).val() + "/round", function( data ) {
+        var table = document.getElementById("resultsTable");
+        var rowCount = table.rows.length;
+        var row = table.insertRow(rowCount);
+
+        row.insertCell(0).innerHTML= data.elementP1;
+        row.insertCell(1).innerHTML= data.elementP2;
+        row.insertCell(2).innerHTML= data.result;
+    });
+  }
+
+});
+
+</script>
+<button id="round">Play Round</button>
+<button id="restart">Restart game</button>
+<input type="hidden" id="game" value="">
+<b>Results:</b>
+<table id="resultsTable" border="1" cellpadding="2">
+  <tr>
+    <td>Player 1</td>
+    <td>Player 2</td>
+    <td>Result</td>
+  </tr>
+</table>
+<br>
+<p style="font-size:11px" id="gameIdLabel"></p>
+</body>
+</html>
