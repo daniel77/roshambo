@@ -22,6 +22,12 @@ public class GameController {
     return ResponseEntity.ok(gameService.newGame());
   }
 
+
+  @GetMapping("/stats")
+  public ResponseEntity<String> stats() {
+    return ResponseEntity.ok(gameService.stats());
+  }
+
   @GetMapping(value = "/{uuid}/round", produces = APPLICATION_JSON_VALUE)
   public ResponseEntity<Round> playRound(@PathVariable(value = "uuid") String uuid) {
     return ResponseEntity.ok(gameService.newRound(uuid));

@@ -1,0 +1,5 @@
+api:
+  roshambostats:
+    name: roshambo-stats-server
+    url: https://roshambo-stats-server.appspot.com
+

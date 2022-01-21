@@ -17,7 +17,7 @@ public class GameService {
   private final Map<String, Game> games = new ConcurrentHashMap<>();
 
   @Autowired
-  StatsService stats;
+  StatsClient stats;
 
   public String newGame() {
     Game game = Game.builder().uuid(UUID.randomUUID().toString()).player1(ROCK_PLAYER).player2(RANDOM_PLAYER).
@@ -35,15 +35,13 @@ public class GameService {
     return round;
   }
 
-
-
   public Result strongerThen(Shape shapeP1, Shape shapeP2) {
     if (shapeP1.getStrongerThen() == shapeP2){
       stats.incrementP1Wins();
       return Result.P1_WINS;
     }
     else if (shapeP1 == shapeP2){
-      stats.incrementP2Wins();
+      stats.incrementDraws();
       return Result.DRAW;
     }
     stats.incrementP2Wins();
@@ -56,5 +54,11 @@ public class GameService {
 
   public int countRounds(String uuid) {
     return games.get(uuid).getRounds().size();
+  }
+
+
+  // TODO CREATE STATS SERVICE
+  public String stats() {
+    return stats.stats();
   }
 }

@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>Roshambo Application</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
 </head>
 <body>
 <script>
@@ -32,6 +31,12 @@ $( document ).ready(function() {
     });
  });
 
+  $("#stats").click(function() {
+      $.get("/stats", function( data ) {
+        alert(data);
+    });
+ });
+
  function round() {
       var uuid = $("#game").val();
        $.get(uuid+ "/round", function( data ) {
@@ -54,13 +59,13 @@ $( document ).ready(function() {
     });
  }
 
+
 });
-
-
 </script>
 <button id="round">Play Round</button>
 <button id="restart">Restart game</button>
-<input type="hidden" id="game" value="">
+<button id="stats">General Stats</button>
+<input type="hidden" id="game" value=""><br>
 <b>Results:</b>
 <table id="resultsTable" border="1" cellpadding="2">
   <tr>
