@@ -23,26 +23,39 @@ $( document ).ready(function() {
  });
 
  $("#restart").click(function() {
-      $.get( $( "#game" ).val() + "/restart", function( data ) {
+      var uuid = $("#game").val();
+      $.get(uuid + "/restart", function( data ) {
         var table = document.getElementById("resultsTable");
         for (i = table.rows.length-1; i>= 1; i--)
           table.deleteRow(i);
+        count(uuid);
     });
  });
 
  function round() {
-       $.get( $( "#game" ).val() + "/round", function( data ) {
+      var uuid = $("#game").val();
+       $.get(uuid+ "/round", function( data ) {
         var table = document.getElementById("resultsTable");
         var rowCount = table.rows.length;
         var row = table.insertRow(rowCount);
 
-        row.insertCell(0).innerHTML= data.elementP1;
-        row.insertCell(1).innerHTML= data.elementP2;
+        row.insertCell(0).innerHTML= data.shapeP1;
+        row.insertCell(1).innerHTML= data.shapeP2;
         row.insertCell(2).innerHTML= data.result;
+
+        count(uuid);
+
     });
   }
 
+ function count(uuid) {
+     $.get(uuid + "/rounds", function( data ) {
+        $("#rounds").text(data);
+    });
+ }
+
 });
+
 
 </script>
 <button id="round">Play Round</button>
@@ -57,6 +70,9 @@ $( document ).ready(function() {
   </tr>
 </table>
 <br>
+<p style="font-size:11px">the number of rounds played by that user so far:</p>
+<p style="font-size:11px" id="rounds"></p>
+<p style="font-size:11px">Game-ID:</p>
 <p style="font-size:11px" id="gameIdLabel"></p>
 </body>
 </html>

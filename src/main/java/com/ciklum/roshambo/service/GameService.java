@@ -1,7 +1,7 @@
 package com.ciklum.roshambo.service;
 
-import com.ciklum.roshambo.model.Game;
-import com.ciklum.roshambo.model.Round;
+import com.ciklum.roshambo.model.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -16,27 +16,45 @@ public class GameService {
 
   private final Map<String, Game> games = new ConcurrentHashMap<>();
 
+  @Autowired
+  StatsService stats;
+
   public String newGame() {
-    Game game = new Game();
-    game.setUuid(UUID.randomUUID().toString());
-    game.setPlayer1(ROCK_PLAYER);
-    game.setPlayer2(RANDOM_PLAYER);
+    Game game = Game.builder().uuid(UUID.randomUUID().toString()).player1(ROCK_PLAYER).player2(RANDOM_PLAYER).
+        build();
     games.put(game.getUuid(), game);
     return game.getUuid();
   }
 
-  public Round round(String uuid) {
+  public Round newRound(String uuid) {
     Game game = games.get(uuid);
-    Round round = new Round();
-    round.setShapeP1(game.getPlayer1().play());
-    round.setShapeP2(game.getPlayer2().play());
-    round.setResult(round.getShapeP1().strongerThen(round.getShapeP2()).getFriendlyName());
+    Round round = Round.builder().shapeP1(game.getPlayer1().play()).shapeP2(game.getPlayer2().play()).build();
+    round.setResult(strongerThen(round.getShapeP1(), round.getShapeP2()).getFriendlyName());
     game.getRounds().add(round);
+    stats.incrementTotalRoundsPlayed();
     return round;
+  }
+
+
+
+  public Result strongerThen(Shape shapeP1, Shape shapeP2) {
+    if (shapeP1.getStrongerThen() == shapeP2){
+      stats.incrementP1Wins();
+      return Result.P1_WINS;
+    }
+    else if (shapeP1 == shapeP2){
+      stats.incrementP2Wins();
+      return Result.DRAW;
+    }
+    stats.incrementP2Wins();
+    return Result.P2_WINS;
   }
 
   public void reset(String uuid) {
     games.get(uuid).getRounds().clear();
   }
 
+  public int countRounds(String uuid) {
+    return games.get(uuid).getRounds().size();
+  }
 }

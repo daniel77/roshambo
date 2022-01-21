@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 public enum Result {
-  P1_WIN("Player 1 won"), P2_WIN("Player 2 won"), DRAW("Draw");
+  P1_WINS("player 1 wins"), P2_WINS("player 2 wins"), DRAW("draw");
 
   @Getter
   private final String friendlyName;

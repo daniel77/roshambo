@@ -24,7 +24,12 @@ public class GameController {
 
   @GetMapping(value = "/{uuid}/round", produces = APPLICATION_JSON_VALUE)
   public ResponseEntity<Round> playRound(@PathVariable(value = "uuid") String uuid) {
-    return ResponseEntity.ok(gameService.round(uuid));
+    return ResponseEntity.ok(gameService.newRound(uuid));
+  }
+
+  @GetMapping(value = "/{uuid}/rounds")
+  public ResponseEntity<Integer> countRounds(@PathVariable(value = "uuid") String uuid) {
+    return ResponseEntity.ok(gameService.countRounds(uuid));
   }
 
   @GetMapping(value = "/{uuid}/restart")
