@@ -1,6 +1,9 @@
 package com.ciklum.roshambo.service;
 
-import com.ciklum.roshambo.model.*;
+import com.ciklum.roshambo.model.Game;
+import com.ciklum.roshambo.model.Result;
+import com.ciklum.roshambo.model.Round;
+import com.ciklum.roshambo.model.Shape;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,20 +11,16 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.ciklum.roshambo.model.Player.RANDOM_PLAYER;
-import static com.ciklum.roshambo.model.Player.ROCK_PLAYER;
-
 @Service
 public class GameService {
 
   private final Map<String, Game> games = new ConcurrentHashMap<>();
 
   @Autowired
-  StatsService stats;
+  RoshamboStatsService stats;
 
   public String newGame() {
-    Game game = Game.builder().uuid(UUID.randomUUID().toString()).player1(ROCK_PLAYER).player2(RANDOM_PLAYER).
-        build();
+    Game game = new Game(UUID.randomUUID().toString());
     games.put(game.getUuid(), game);
     return game.getUuid();
   }
@@ -35,15 +34,13 @@ public class GameService {
     return round;
   }
 
-
-
   public Result strongerThen(Shape shapeP1, Shape shapeP2) {
     if (shapeP1.getStrongerThen() == shapeP2){
       stats.incrementP1Wins();
       return Result.P1_WINS;
     }
     else if (shapeP1 == shapeP2){
-      stats.incrementP2Wins();
+      stats.incrementDraws();
       return Result.DRAW;
     }
     stats.incrementP2Wins();
@@ -56,5 +53,9 @@ public class GameService {
 
   public int countRounds(String uuid) {
     return games.get(uuid).getRounds().size();
+  }
+
+  public String stats() {
+    return stats.getStatistics();
   }
 }

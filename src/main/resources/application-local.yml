@@ -1,0 +1,5 @@
+api:
+  roshambostats:
+    name: roshambo-stats-server
+    url: http://localhost:8081
+

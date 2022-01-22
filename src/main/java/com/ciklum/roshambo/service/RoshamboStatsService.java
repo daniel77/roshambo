@@ -1,28 +1,33 @@
 package com.ciklum.roshambo.service;
 
-import com.ciklum.roshambo.model.Stats;
+import com.ciklum.roshambo.stats.RoshamboStatsClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class StatsService {
+public class RoshamboStatsService {
 
   @Autowired
-  Stats stats;
+  private RoshamboStatsClient stats;
 
   public void incrementTotalRoundsPlayed() {
-    stats.getTotalRoundsPlayed().incrementAndGet();
+    stats.incrementTotalRoundsPlayed();
   }
 
   public void incrementP2Wins() {
-    stats.getTotalWinsP2().incrementAndGet();
+    stats.incrementP2Wins();
   }
 
   public void incrementDraws() {
-    stats.getTotalDraws().incrementAndGet();
+    stats.incrementDraws();
   }
 
   public void incrementP1Wins() {
-    stats.getTotalWinsP1().incrementAndGet();
+    stats.incrementP1Wins();
   }
+
+  public String getStatistics() {
+    return stats.stats();
+  }
+
 }
