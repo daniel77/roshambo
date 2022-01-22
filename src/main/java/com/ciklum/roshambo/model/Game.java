@@ -1,19 +1,17 @@
 package com.ciklum.roshambo.model;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @ToString
-@Builder
+@RequiredArgsConstructor
 public class Game {
+  @NonNull
   private String uuid;
-  private Player player1;
-  private Player player2;
-  @Builder.Default
+  private Player player1 = () -> Shape.ROCK;
+  private Player player2 = Player::randomElement;
   private List<Round> rounds = new ArrayList<>();
 }
