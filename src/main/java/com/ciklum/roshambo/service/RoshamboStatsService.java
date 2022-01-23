@@ -1,33 +1,16 @@
 package com.ciklum.roshambo.service;
 
-import com.ciklum.roshambo.stats.RoshamboStatsClient;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+/**
+ * Service to use Roshambo Stats microservice
+ */
+public interface RoshamboStatsService {
+  void incrementTotalRoundsPlayed();
 
-@Service
-public class RoshamboStatsService {
+  void incrementP2Wins();
 
-  @Autowired
-  private RoshamboStatsClient stats;
+  void incrementDraws();
 
-  public void incrementTotalRoundsPlayed() {
-    stats.incrementTotalRoundsPlayed();
-  }
+  void incrementP1Wins();
 
-  public void incrementP2Wins() {
-    stats.incrementP2Wins();
-  }
-
-  public void incrementDraws() {
-    stats.incrementDraws();
-  }
-
-  public void incrementP1Wins() {
-    stats.incrementP1Wins();
-  }
-
-  public String getStatistics() {
-    return stats.stats();
-  }
-
+  String getStatistics();
 }

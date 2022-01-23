@@ -9,11 +9,15 @@ api:
     title: Game Roshambo API
     description: Game Api to play rock-paper-scissors
     version: 0.0.1
-    startOp: To start a new game.
-    roundOp: Execute the next round.
-    roundsOp: Gets all rounds of current match.
     param: UUID parameter of the current game.
     example: 587f3c61-eed0-4a03-84ff-4846f95c7f38
+  operations:
+    start: To start a new game.
+    round: Execute the next round.
+    rounds: Gets all rounds of current match.
+    restart: Restart the current game.
+
+
 
 spring:
   mvc:
