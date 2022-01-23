@@ -35,6 +35,6 @@ public class SwaggerConfig {
 
   private ApiInfo getApiInfo(String title, String description, String version, String author, String url, String email) {
     return new ApiInfoBuilder().title(title).description(description).version(version).
-        contact( new Contact(author, url, email)).build();
+        contact(new Contact(author, url, email)).build();
   }
 }
