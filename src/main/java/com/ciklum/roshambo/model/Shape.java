@@ -2,6 +2,8 @@ package com.ciklum.roshambo.model;
 
 import lombok.Getter;
 
+import java.util.Comparator;
+
 public enum Shape {
   ROCK,
   SCISSORS,
@@ -15,5 +17,5 @@ public enum Shape {
     SCISSORS.strongerThen = PAPER;
     PAPER.strongerThen = ROCK;
   }
-
 }
+

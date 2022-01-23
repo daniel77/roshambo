@@ -1,61 +1,57 @@
 package com.ciklum.roshambo.service;
 
-import com.ciklum.roshambo.model.Game;
 import com.ciklum.roshambo.model.Result;
 import com.ciklum.roshambo.model.Round;
 import com.ciklum.roshambo.model.Shape;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
+/**
+ * Service that provides Roshambo game options
+ */
+public interface GameService {
 
-@Service
-public class GameService {
+  /**
+   * Start a new game
+   * @return UUID of the new game
+   */
+  String newGame();
 
-  private final Map<String, Game> games = new ConcurrentHashMap<>();
+  /**
+   * New round for the game
+   * @param uuid game in question
+   * @return new Round
+   */
+  Round newRound(String uuid);
 
-  @Autowired
-  RoshamboStatsService stats;
+  /**
+   *  A player who decides to play rock will beat another player who has chosen scissors,
+   *  but will lose to one who has played paper ("paper covers rock");
+   *  a play of paper will lose to a play of scissors ("scissors cuts paper").
+   *
+   *  If both players choose the same shape, the game is tied
+   *
+   * @param shapeP1 Shape chosen by player one
+   * @param shapeP2 Shape chosen by player two
+   * @return Result of the roudn.
+   *
+   */
+  Result evaluate(Shape shapeP1, Shape shapeP2);
 
-  public String newGame() {
-    Game game = new Game(UUID.randomUUID().toString());
-    games.put(game.getUuid(), game);
-    return game.getUuid();
-  }
+  /**
+   * Restart the game
+   * @param uuid game in question
+   */
+  void restart(String uuid);
 
-  public Round newRound(String uuid) {
-    Game game = games.get(uuid);
-    Round round = Round.builder().shapeP1(game.getPlayer1().play()).shapeP2(game.getPlayer2().play()).build();
-    round.setResult(strongerThen(round.getShapeP1(), round.getShapeP2()).getFriendlyName());
-    game.getRounds().add(round);
-    stats.incrementTotalRoundsPlayed();
-    return round;
-  }
+  /**
+   * Count how many rounds have been played in current game
+   * @param uuid game in question
+   * @return total of rounds
+   */
+  int countRounds(String uuid);
 
-  public Result strongerThen(Shape shapeP1, Shape shapeP2) {
-    if (shapeP1.getStrongerThen() == shapeP2){
-      stats.incrementP1Wins();
-      return Result.P1_WINS;
-    }
-    else if (shapeP1 == shapeP2){
-      stats.incrementDraws();
-      return Result.DRAW;
-    }
-    stats.incrementP2Wins();
-    return Result.P2_WINS;
-  }
-
-  public void reset(String uuid) {
-    games.get(uuid).getRounds().clear();
-  }
-
-  public int countRounds(String uuid) {
-    return games.get(uuid).getRounds().size();
-  }
-
-  public String stats() {
-    return stats.getStatistics();
-  }
+  /**
+   * Return all time stats.
+   * @return String with all stats.
+   */
+  String stats();
 }
