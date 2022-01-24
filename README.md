@@ -26,6 +26,7 @@ You can run it locally just by running the command:
 ```
 mvn package
 ```
+and then
 ```
 java -jar target/roshambo-0.0.1-SNAPSHOT.jar
 ```
@@ -59,6 +60,10 @@ There are three buttons operations.
 * Restart game
 * General Stats
 
+The user also can see how many rounds was played in the current game.
+Every game has its own uuid to identify the game. 
+
+
 ## API Reference Documentation
 The API documentation is available in these following urls:
 * https://roshambo-dgorski.appspot.com/v2/api-docs
@@ -70,10 +75,11 @@ The Swagger documentation is available in these following url:
 * https://roshambo-dgorski.appspot.com/swagger-ui.html
 * http://localhost:8080/swagger-ui.html
 
-## Integration test
-The class RoshamboApplicationTests execute all integration tests with the test server running
-
 ## Unit testing
+The class RoshamboApplicationTests execute services/controllers tests with the test server running.
+```
+mvn test
+```
 The class GameServiceImplTest has Unit testing. 
 The project has around 90% of testing coverage.
 
